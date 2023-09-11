@@ -1,9 +1,10 @@
-import { ClosedTicket, TicketSummary } from "@fixhub/types/ticket";
+import { ServiceRequest } from "@fixhub/types/request";
+import { TicketSummary } from "@fixhub/types/ticket";
 import { create } from "zustand";
 
 type RequestTicketStore = {
-  requests: any;
-  setRequests: (request: any) => void;
+  requests: ServiceRequest[];
+  setRequests: (request: ServiceRequest[]) => void;
 };
 
 type ActiveTicketStore = {

@@ -4,6 +4,7 @@ import { FunctionComponent, useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { TicketSummary } from "@fixhub/types/ticket";
 import { MarkTicketAsClosedModal } from "./MarkTicketAsClosedModal";
+import { ActiveTicketDetailsSlideOver } from "./ActiveTicketDetailsSlideOver";
 
 type DropdownTicketCardOptionsProps = {
   ticket: TicketSummary;
@@ -11,9 +12,12 @@ type DropdownTicketCardOptionsProps = {
 
 export const DropdownTicketCardOptions: FunctionComponent<DropdownTicketCardOptionsProps> = ({ ticket }) => {
   const [open, setOpen] = useState(false);
+  const [openDetailsSlideOver, setOpenDetailsSlideOver] = useState(false);
 
   return (
     <>
+      <ActiveTicketDetailsSlideOver open={openDetailsSlideOver} setOpen={setOpenDetailsSlideOver} ticket={ticket} />
+
       <MarkTicketAsClosedModal open={open} setOpen={setOpen} ticket={ticket} />
       <DropdownMenu.Root>
         <DropdownMenu.Trigger className="h-8 w-8 bg-zinc-900/70 hover:bg-zinc-900 flex items-center justify-center rounded-full group">
@@ -42,7 +46,7 @@ export const DropdownTicketCardOptions: FunctionComponent<DropdownTicketCardOpti
 
             <DropdownMenu.Group>
               <DropdownMenu.Item
-                onClick={() => console.log(ticket.requestor.fullName)}
+                onClick={() => setOpenDetailsSlideOver(true)}
                 className="px-3 py-2 hover:bg-zinc-800 cursor-pointer outline-none"
               >
                 <div className="flex items-center justify-between">

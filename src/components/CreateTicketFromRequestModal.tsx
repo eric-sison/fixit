@@ -1,30 +1,30 @@
+import { ServiceRequest } from "@fixhub/types/request";
 import { Combobox, Dialog, Transition } from "@headlessui/react";
 import { Fragment, FunctionComponent, useEffect, useState } from "react";
-import users from "../../mock/users";
-import supportTypes from "../../mock/support-types";
-import categories from "../../mock/categories";
-import { User } from "@fixhub/types/users";
 import Image from "next/image";
 import dayjs from "dayjs";
 import { Category, SupportType } from "@fixhub/types/ticket";
-import { useActiveTicketsStore } from "@fixhub/utils/stores/tickets";
+import supportTypes from "../../mock/support-types";
+import categories from "../../mock/categories";
+import { useActiveTicketsStore, useRequestTicketStore } from "@fixhub/utils/stores/tickets";
+import requests from "../../mock/requests";
 
-type ModalProps = {
+type CreateTicketFromRequestModalProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
+  request: ServiceRequest;
 };
 
-export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen }) => {
+export const CreateTicketFromRequestModal: FunctionComponent<CreateTicketFromRequestModalProps> = ({
+  open,
+  setOpen,
+  request,
+}) => {
+  const myRequests = useRequestTicketStore((state) => state.requests);
+  const setMyRequests = useRequestTicketStore((state) => state.setRequests);
+
   const activeTickets = useActiveTicketsStore((state) => state.activeTickets);
   const setActiveTickets = useActiveTicketsStore((state) => state.setActiveTickets);
-  //const { tickets, setTickets } = useTickets();
-
-  // states used for requestor
-  const [selectedRequestor, setSelectedRequestor] = useState<User>(users[0]);
-  const [queryRequestor, setQueryRequestor] = useState("");
-
-  // state used for date requested
-  const [dateRequested, setDateRequested] = useState(dayjs().format("YYYY-MM-DD"));
 
   // states used for support type
   const [selectedSupportType, setSelectedSupportType] = useState<SupportType>(supportTypes[0]);
@@ -39,20 +39,10 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>(selectedCategory.subCategories[0]);
   const [querySubCategory, setQuerySubCategory] = useState("");
 
-  // states used for details
-  const [details, setDetails] = useState("");
-
   useEffect(() => {
     setSubCategories(selectedCategory.subCategories);
     setSelectedSubCategory(selectedCategory.subCategories[0]);
   }, [selectedCategory.name, selectedCategory.subCategories]);
-
-  const filteredRequestors =
-    queryRequestor === ""
-      ? users
-      : users.filter((user) => {
-          return user.fullName.toLowerCase().includes(queryRequestor.toLowerCase());
-        });
 
   const filteredSupportTypes =
     querySupportType === ""
@@ -77,12 +67,9 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
 
   const reset = () => {
     setOpen(false);
-    setSelectedRequestor(users[0]);
-    setDateRequested(dayjs().format("YYYY-MM-DD"));
     setSelectedSupportType(supportTypes[0]);
     setSelectedCategory(categories[0]);
     setSelectedSubCategory(selectedCategory.subCategories[0]);
-    setDetails("");
   };
 
   return (
@@ -111,22 +98,86 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-[42rem] space-y-10 transform overflow-hidden rounded-lg bg-zinc-900 border border-zinc-800 p-6 text-left align-middle shadow-xl transition-all">
-                <header>
-                  <Dialog.Title as="h3" className="text-2xl font-semibold leading-6 text-font-regular">
+              <Dialog.Panel className="w-[42rem] space-y-7 transform overflow-hidden rounded-lg bg-zinc-900 border border-zinc-800 p-6 text-left align-middle shadow-xl transition-all">
+                <header className="flex items-center gap-3">
+                  <Image
+                    src={request.requestor.avatar}
+                    width={500}
+                    height={500}
+                    alt={"profile"}
+                    className="inline-block h-[4rem] w-[4rem] rounded-full object-cover shrink-0 border-4 border-font-regular"
+                  />
+
+                  <div>
+                    <h3 className="text-2xl font-semibold text-font-regular">{request.requestor.fullName}</h3>
+                    <p className="text-font-regular/70 font-medium truncate">{request.requestor.positionTitle}</p>
+                  </div>
+                  {/* <Dialog.Title as="h3" className="text-2xl font-semibold leading-6 text-font-regular">
                     Create new ticket
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-font-muted">Note that this ticket will be automatically assigned to you.</p>
-                  </div>
+                  </div> */}
                 </header>
+
+                <main>
+                  <p className="text-2xl">{request.details}</p>
+
+                  <div>
+                    <div className="flex items-center gap-3 mt-3">
+                      <div className="flex items-center gap-1 justify-end text-font-muted">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 24 24"
+                          className="text-font-muted/75"
+                        >
+                          <g fill="currentColor">
+                            <path d="M15 17a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z"></path>
+                            <path
+                              fillRule="evenodd"
+                              d="M6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H6ZM5 18V7h14v11a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1Z"
+                              clipRule="evenodd"
+                            ></path>
+                          </g>
+                        </svg>
+                        <p className="font-medium text-sm text-font-muted/75">
+                          {dayjs(request.createdAt).format("DD MMM YYYY")}
+                        </p>
+                      </div>
+                      <p className="text-sm text-font-muted/50">|</p>
+                      <div className="flex items-center gap-1 justify-end text-font-muted">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 24 24"
+                          className="text-font-muted/75"
+                        >
+                          <g fill="currentColor">
+                            <path d="M9 7h2v5h5v2H9V7Z"></path>
+                            <path
+                              fillRule="evenodd"
+                              d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2s10 4.477 10 10Zm-2 0a8 8 0 1 1-16 0a8 8 0 0 1 16 0Z"
+                              clipRule="evenodd"
+                            ></path>
+                          </g>
+                        </svg>
+                        <p className="font-medium text-sm text-font-muted/75">
+                          {dayjs(request.createdAt).format("hh:mm A")}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </main>
 
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
                   }}
                 >
-                  <section className="">
+                  {/* <section className="">
                     <div className="w-full">
                       <label htmlFor="requestor" className="pl-1 font-medium text-sm text-font-regular/80">
                         Requestor
@@ -136,67 +187,28 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
                       </p>
 
                       <div className="relative">
-                        <Combobox value={selectedRequestor} onChange={setSelectedRequestor}>
-                          <div className="relative">
-                            <div className="absolute h-full left-3 top-[0.6rem]">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="1.5em"
-                                height="1.5em"
-                                viewBox="0 0 24 24"
-                                className="text-font-muted"
-                              >
-                                <path
-                                  fill="currentColor"
-                                  fillRule="evenodd"
-                                  d="M18.319 14.433A8.001 8.001 0 0 0 6.343 3.868a8 8 0 0 0 10.564 11.976l.043.045l4.242 4.243a1 1 0 1 0 1.415-1.415l-4.243-4.242a1.116 1.116 0 0 0-.045-.042Zm-2.076-9.15a6 6 0 1 1-8.485 8.485a6 6 0 0 1 8.485-8.485Z"
-                                  clipRule="evenodd"
-                                ></path>
-                              </svg>
-                            </div>
-                            <Combobox.Input
-                              id="requestor"
-                              onChange={(e) => setQueryRequestor(e.target.value)}
-                              displayValue={(requestor: User) => requestor?.fullName}
-                              className="w-full outline-none placeholder:text-font-muted rounded-md bg-zinc-800/40 pl-11 py-2 border border-zinc-800 focus:border-blue-700"
-                            />
+                        <input
+                          defaultValue={request.requestor.fullName}
+                          disabled
+                          id="requestor"
+                          className="w-full outline-none rounded-md bg-zinc-800/40 pl-11 py-2 border border-zinc-800 text-font-regular/70 font-semibold"
+                        />
 
-                            <Combobox.Options className="absolute z-30 border border-zinc-800 mt-2 rounded max-h-96 overflow-auto min-w-[20rem]">
-                              {filteredRequestors.map((requestor, index) => (
-                                <Combobox.Option key={index} value={requestor} as={Fragment}>
-                                  {({ active, selected }) => (
-                                    <li
-                                      role="button"
-                                      className={`${
-                                        active || selected
-                                          ? "bg-zinc-900 border-b-zinc-700/40"
-                                          : "bg-zinc-950 border-b-zinc-800/40"
-                                      } px-5 py-3 flex gap-3 items-center border-b last:border-b-transparent`}
-                                    >
-                                      <Image
-                                        src={requestor.avatar}
-                                        width={500}
-                                        height={500}
-                                        alt={`profile-${requestor.id}`}
-                                        className="inline-block h-[2.5rem] w-[2.5rem] rounded-full object-cover shrink-0"
-                                      />
-                                      <section>
-                                        <h3 className="text-font-regular/80 font-medium">{requestor.fullName}</h3>
-                                        <p className="text-font-muted text-sm">{requestor.positionTitle}</p>
-                                      </section>
-                                    </li>
-                                  )}
-                                </Combobox.Option>
-                              ))}
-                            </Combobox.Options>
-                          </div>
-                        </Combobox>
+                        <div className="absolute top-0 flex items-center h-full w-10 p-[0.4rem]">
+                          <Image
+                            src={request.requestor.avatar}
+                            width={500}
+                            height={500}
+                            alt={"profile"}
+                            className="inline-block h-full w-full rounded-full object-cover shrink-0 border ml-1"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </section>
+                  </section> */}
 
-                  <section className="mt-7 flex items-center gap-4 justify-between">
-                    <div className="flex flex-col w-full">
+                  <section className="mt-8 flex items-center gap-4 justify-between">
+                    {/* <div className="flex flex-col w-full">
                       <label htmlFor="date" className="pl-1 font-medium text-sm text-font-regular/80">
                         Date requested
                       </label>
@@ -204,12 +216,12 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
                       <input
                         id="date"
                         type="date"
-                        value={dateRequested}
-                        onChange={(e) => setDateRequested(e.target.value)}
-                        className="w-full outline-none placeholder:text-font-muted rounded-md bg-zinc-800/40 px-3 py-2 border border-zinc-800 focus:border-blue-700"
+                        disabled
+                        defaultValue={dayjs(request.createdAt).format("YYYY-MM-DD")}
+                        className="w-full outline-none placeholder:text-font-muted rounded-md bg-zinc-800/40 px-3 py-2 border border-zinc-800 text-font-regular/70 font-semibold"
                         placeholder="Date requested"
                       />
-                    </div>
+                    </div> */}
 
                     <div className="flex flex-col w-full">
                       <label htmlFor="support-type" className="pl-1 font-medium text-sm text-font-regular/80">
@@ -272,6 +284,11 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
                           )}
                         </div>
                       </Combobox>
+
+                      {/* <input
+                        id="support-type"
+                        className="w-full outline-none placeholder:text-font-muted rounded-md bg-zinc-800/40 pl-11 py-2 border border-zinc-800 focus:border-blue-700"
+                      /> */}
                     </div>
                   </section>
 
@@ -302,7 +319,7 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
                           </div>
 
                           {filteredCategories.length === 0 ? null : (
-                            <Combobox.Options className="absolute border border-zinc-800 mt-2 rounded max-h-96 overflow-auto min-w-full">
+                            <Combobox.Options className="absolute z-[100] border border-zinc-800 mt-2 rounded max-h-96 overflow-auto min-w-full">
                               {filteredCategories.map((category, index) => (
                                 <Combobox.Option key={index} value={category} as={Fragment}>
                                   {({ active, selected }) => (
@@ -337,6 +354,11 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
                           )}
                         </div>
                       </Combobox>
+
+                      {/* <input
+                        id="category"
+                        className="w-full outline-none placeholder:text-font-muted rounded-md bg-zinc-800/40 pl-11 py-2 border border-zinc-800 focus:border-blue-700"
+                      /> */}
                     </div>
 
                     <div className="flex flex-col w-full">
@@ -400,26 +422,114 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
                           )}
                         </div>
                       </Combobox>
+
+                      {/* <input
+                        id="sub-category"
+                        className="w-full outline-none placeholder:text-font-muted rounded-md bg-zinc-800/40 pl-11 py-2 border border-zinc-800 focus:border-blue-700"
+                      /> */}
                     </div>
                   </section>
 
-                  <section className="mt-7">
+                  <section className="mt-8">
+                    <div className="flex flex-col w-full">
+                      <label htmlFor="remarks" className="pl-1 font-medium text-sm text-font-regular/80">
+                        Remarks
+                      </label>
+                      <p className="text-sm pl-1 text-font-muted mb-2">
+                        You may provide some additional details for this request.
+                      </p>
+                      <textarea
+                        // value={details}
+                        // onChange={(e) => setDetails(e.target.value)}
+                        id="remarks"
+                        rows={5}
+                        className="w-full resize-none outline-none rounded-md bg-zinc-800/40 px-3 py-2 border border-zinc-800 focus:border-blue-700"
+                      />
+                    </div>
+                    {/* <div className="flex items-start gap-3 rounded-lg p-5 bg-zinc-950/70">
+                      <Image
+                        src={request.requestor.avatar}
+                        width={500}
+                        height={500}
+                        alt={"profile"}
+                        className="inline-block h-[4rem] w-[4rem] rounded-full object-cover shrink-0 border-4 border-font-regular"
+                      />
+                      <section className="pr-4">
+                        <h3 className="text-2xl font-semibold text-font-regular">{request.requestor.fullName}</h3>
+                        <p className="text-font-regular/70 font-medium truncate">{request.requestor.positionTitle}</p>
+
+                        <div className="mt-4">
+                          <p className="text-2xl">{request.details}</p>
+                        </div>
+
+                        <div>
+                          <div className="flex items-center gap-3 mt-3">
+                            <div className="flex items-center gap-1 justify-end text-font-muted">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="1em"
+                                height="1em"
+                                viewBox="0 0 24 24"
+                                className="text-font-muted/75"
+                              >
+                                <g fill="currentColor">
+                                  <path d="M15 17a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z"></path>
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H6ZM5 18V7h14v11a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1Z"
+                                    clipRule="evenodd"
+                                  ></path>
+                                </g>
+                              </svg>
+                              <p className="font-medium text-sm text-font-muted/75">
+                                {dayjs(request.createdAt).format("DD MMM YYYY")}
+                              </p>
+                            </div>
+                            <p className="text-sm text-font-muted/50">|</p>
+                            <div className="flex items-center gap-1 justify-end text-font-muted">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="1em"
+                                height="1em"
+                                viewBox="0 0 24 24"
+                                className="text-font-muted/75"
+                              >
+                                <g fill="currentColor">
+                                  <path d="M9 7h2v5h5v2H9V7Z"></path>
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2s10 4.477 10 10Zm-2 0a8 8 0 1 1-16 0a8 8 0 0 1 16 0Z"
+                                    clipRule="evenodd"
+                                  ></path>
+                                </g>
+                              </svg>
+                              <p className="font-medium text-sm text-font-muted/75">
+                                {dayjs(request.createdAt).format("hh:mm A")}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </section>
+                    </div> */}
+                  </section>
+
+                  {/* <section className="mt-7">
                     <div className="flex flex-col w-full">
                       <label htmlFor="details" className="pl-1 font-medium text-sm text-font-regular/80">
                         Details
                       </label>
                       <p className="text-sm pl-1 text-font-muted mb-2">Please elaborate the details of the request.</p>
                       <textarea
-                        value={details}
-                        onChange={(e) => setDetails(e.target.value)}
+                        defaultValue={request.details}
+                        disabled
                         id="details"
                         rows={5}
-                        className="w-full resize-none outline-none rounded-md bg-zinc-800/40 px-3 py-2 border border-zinc-800 focus:border-blue-700"
+                        className="w-full resize-none outline-none rounded-md bg-zinc-800/40 px-3 py-2 border border-zinc-800 text-font-regular/70 font-semibold"
                       />
                     </div>
-                  </section>
+                  </section> */}
 
-                  <section className="mt-7 mb-8 flex items-center justify-end gap-3">
+                  <section className="mb-8 flex items-center justify-end gap-3 mt-7">
                     <button
                       onClick={() => reset()}
                       className="px-3 py-2 bg-zinc-800 rounded-md font-semibold hover:bg-zinc-800/50"
@@ -428,24 +538,29 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
                     </button>
                     <button
                       onClick={() => {
+                        // update active tickets
                         const ticketId = Math.floor(Math.random() * 100 + 1);
                         const ticketNo = Math.floor(Math.random() * (999 - 100 + 1) + 100);
-
                         const newActiveTickets = [...activeTickets];
-
                         newActiveTickets.push({
                           id: ticketId.toString(),
                           ticketNo,
-                          requestor: selectedRequestor,
-                          createdAt: dayjs(dateRequested).format() as unknown as Date,
+                          requestor: request.requestor,
+                          createdAt: dayjs(request.createdAt).format() as unknown as Date,
                           supportType: selectedSupportType.type,
                           category: selectedCategory.name,
                           subCategory: selectedSubCategory,
-                          details,
+                          details: request.details,
                           status: "active",
                         });
-
                         setActiveTickets(newActiveTickets);
+
+                        // update requests
+                        const newRequests = [...myRequests];
+                        const index = newRequests.findIndex((request) => request.id === request.id);
+                        newRequests.splice(index, 1);
+                        setMyRequests(newRequests);
+
                         reset();
                       }}
                       className="px-4 py-2 bg-blue-700 rounded-md font-semibold hover:bg-blue-800"

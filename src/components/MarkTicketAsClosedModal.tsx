@@ -30,6 +30,11 @@ export const MarkTicketAsClosedModal: FunctionComponent<MarkTicketAsClosedModalP
     inputRef?.current.click();
   };
 
+  const reset = () => {
+    setOpen(false);
+    setDetails("");
+  };
+
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog onClose={() => setOpen(false)} className="relative z-10">
@@ -64,7 +69,7 @@ export const MarkTicketAsClosedModal: FunctionComponent<MarkTicketAsClosedModalP
                       width={500}
                       height={500}
                       alt={"profile"}
-                      className="inline-block h-[4rem] w-[4rem] rounded-full object-cover shrink-0 border-2 border-blue-700"
+                      className="inline-block h-[5rem] w-[5rem] rounded-full object-cover shrink-0 border-4 border-font-regular"
                     />
                     <section>
                       <h3 className="text-2xl font-semibold text-font-regular">{ticket.requestor.fullName}</h3>
@@ -78,7 +83,7 @@ export const MarkTicketAsClosedModal: FunctionComponent<MarkTicketAsClosedModalP
                     </Dialog.Title>
 
                     <div className="mt-2">
-                      <p className="text-font-regular/75 font-semibold text-3xl">{ticket.details}</p>
+                      <p className="text-font-regular/75 font-semibold text-2xl">{ticket.details}</p>
                     </div>
 
                     <div className="space-x-2 mt-1">
@@ -194,7 +199,7 @@ export const MarkTicketAsClosedModal: FunctionComponent<MarkTicketAsClosedModalP
 
                         <section className="mt-4 mb-8 flex items-center justify-end gap-3">
                           <button
-                            onClick={() => setOpen(false)}
+                            onClick={() => reset()}
                             className="px-3 py-2 bg-zinc-800 rounded-md font-semibold hover:bg-zinc-800/50"
                           >
                             Cancel
@@ -213,7 +218,7 @@ export const MarkTicketAsClosedModal: FunctionComponent<MarkTicketAsClosedModalP
 
                               setActiveTickets(newActiveTickets);
 
-                              setOpen(false);
+                              reset();
                             }}
                             className="px-4 py-2 bg-blue-700 rounded-md font-semibold hover:bg-blue-800"
                           >
