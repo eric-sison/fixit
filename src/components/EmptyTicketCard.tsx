@@ -1,8 +1,9 @@
 import { FunctionComponent } from "react";
 import { CardIcon } from "./CardIcon";
+import { ServiceStatus } from "@fixhub/types/request";
 
 type EmptyTicketCardProps = {
-  status: "request" | "active" | "closed" | "cancelled";
+  status: ServiceStatus;
 };
 
 export const EmptyTicketCard: FunctionComponent<EmptyTicketCardProps> = ({ status }) => {
@@ -10,12 +11,12 @@ export const EmptyTicketCard: FunctionComponent<EmptyTicketCardProps> = ({ statu
     <div className="w-full p-7 rounded-lg flex bg-zinc-900 border border-zinc-700/50">
       <div className="space-y-3 flex flex-col items-center justify-center">
         <div className="">
-          {status === "request" ? (
+          {status === "queue" ? (
             <>
               <CardIcon
                 icon={<EmptyRequestTicketCardIcon />}
                 title="No requests"
-                description="There are no service requests at the moment."
+                description="There are no requests on queue at the moment."
               />
             </>
           ) : status === "active" ? (
@@ -31,7 +32,7 @@ export const EmptyTicketCard: FunctionComponent<EmptyTicketCardProps> = ({ statu
               <CardIcon
                 icon={<EmptyClosedTicketCardIcon />}
                 title="No closed tickets"
-                description="Closed tickets are those that have been resolved requests."
+                description="Closed tickets are requests that have been resolved."
               />
             </>
           ) : (
@@ -52,14 +53,12 @@ export const EmptyTicketCard: FunctionComponent<EmptyTicketCardProps> = ({ statu
 const EmptyRequestTicketCardIcon: FunctionComponent = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24" className="text-blue-700">
-      <g fill="currentColor">
-        <path d="M10 18v-2H8v-2h2v-2h2v2h2v2h-2v2h-2Z"></path>
-        <path
-          fillRule="evenodd"
-          d="M6 2a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V9a7 7 0 0 0-7-7H6Zm0 2h7v5h6v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm9 .1A5.009 5.009 0 0 1 18.584 7H15V4.1Z"
-          clipRule="evenodd"
-        ></path>
-      </g>
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="M19 4a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h14Zm1 5.625h-7c-.552 0-1.156-.42-1.348-.938L10.654 6H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9.625Z"
+        clipRule="evenodd"
+      ></path>
     </svg>
   );
 };

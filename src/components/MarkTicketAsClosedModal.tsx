@@ -24,7 +24,11 @@ export const MarkTicketAsClosedModal: FunctionComponent<MarkTicketAsClosedModalP
   const inputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
   const textAreaRef = useRef(null) as unknown as MutableRefObject<HTMLTextAreaElement>;
 
-  useEffect(() => textAreaRef?.current?.focus(), []);
+  useEffect(() => {
+    textAreaRef?.current?.focus()
+
+  }, [open]);
+
 
   const handleAttachment = () => {
     inputRef?.current.click();
@@ -62,14 +66,14 @@ export const MarkTicketAsClosedModal: FunctionComponent<MarkTicketAsClosedModalP
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-[42rem] space-y-10 transform overflow-hidden rounded-lg bg-zinc-900 border border-zinc-800 p-6 text-left align-middle shadow-xl transition-all">
-                <div className="space-y-10 px-2">
-                  <div className="flex items-center gap-3">
+                <div className="space-y-5 px-2">
+                  <div className="flex items-center gap-5">
                     <Image
                       src={ticket.requestor.avatar}
                       width={500}
                       height={500}
                       alt={"profile"}
-                      className="inline-block h-[5rem] w-[5rem] rounded-full object-cover shrink-0 border-4 border-font-regular"
+                      className="inline-block h-[4rem] w-[4rem] rounded-full object-cover shrink-0 border-4 border-font-regular"
                     />
                     <section>
                       <h3 className="text-2xl font-semibold text-font-regular">{ticket.requestor.fullName}</h3>
@@ -79,7 +83,7 @@ export const MarkTicketAsClosedModal: FunctionComponent<MarkTicketAsClosedModalP
 
                   <section>
                     <Dialog.Title as="h3" className="text-2xl font-semibold leading-6 text-font-regular">
-                      <code className="bg-zinc-700 px-1 rounded text-3xl font-bold">{`#${ticket.ticketNo}`}</code>
+                      <code className="px-1 rounded text-3xl font-bold">{`#${ticket.ticketNo}`}</code>
                     </Dialog.Title>
 
                     <div className="mt-2">
@@ -138,18 +142,18 @@ export const MarkTicketAsClosedModal: FunctionComponent<MarkTicketAsClosedModalP
                       </div>
                     </div>
 
-                    <main className="mt-5">
+                    <main className="mt-10">
                       <div className="mb-10">
                         <section className="mb-2">
                           <input ref={inputRef} type="file" className="invisible absolute" />
                           <button
                             onClick={handleAttachment}
-                            className="flex items-center gap-2 px-3 py-2 bg-zinc-800 rounded-md font-semibold hover:bg-zinc-800/50"
+                            className="flex items-center gap-2 px-3 py-2 bg-zinc-800/70 rounded-md font-semibold hover:bg-zinc-800/50"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              width="1.5em"
-                              height="1.5em"
+                              width="1.2em"
+                              height="1.2em"
                               viewBox="0 0 24 24"
                               className="text-font-regular group-hover:text-font-regular"
                             >
@@ -164,19 +168,6 @@ export const MarkTicketAsClosedModal: FunctionComponent<MarkTicketAsClosedModalP
                             <span>Attachments</span>
                           </button>
                         </section>
-
-                        {/* <section className="">
-                          <div className="h-32 w-32">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="h-full w-full">
-                              <path fill="#90CAF9" d="M40 45H8V3h22l10 10z"></path>
-                              <path fill="#E1F5FE" d="M38.5 14H29V4.5z"></path>
-                              <path fill="#1565C0" d="m21 23l-7 10h14z"></path>
-                              <path fill="#1976D2" d="M28 26.4L23 33h10z"></path>
-                              <circle cx="31.5" cy="24.5" r="1.5" fill="#1976D2"></circle>
-                            </svg>
-                            <p className="truncate w-full">Screenshot from 2023-08-02 16-24-17.png</p>
-                          </div>
-                        </section> */}
                       </div>
 
                       <form onSubmit={(e) => e.preventDefault()}>
@@ -185,7 +176,7 @@ export const MarkTicketAsClosedModal: FunctionComponent<MarkTicketAsClosedModalP
                             Resolution
                           </label>
                           <p className="pl-1 text-font-muted mb-2">
-                            Please provide the details on how the request was satisfied.
+                            Please provide the details on how the request was resolved.
                           </p>
                           <textarea
                             ref={textAreaRef}
@@ -193,6 +184,7 @@ export const MarkTicketAsClosedModal: FunctionComponent<MarkTicketAsClosedModalP
                             onChange={(e) => setDetails(e.target.value)}
                             id="details"
                             rows={5}
+                            placeholder="Enter details here..."
                             className="w-full resize-none outline-none rounded-md bg-zinc-800/40 px-3 py-2 border border-zinc-800 focus:border-blue-700"
                           />
                         </section>

@@ -98,8 +98,8 @@ export const CreateTicketFromRequestModal: FunctionComponent<CreateTicketFromReq
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-[42rem] space-y-7 transform overflow-hidden rounded-lg bg-zinc-900 border border-zinc-800 p-6 text-left align-middle shadow-xl transition-all">
-                <header className="flex items-center gap-3">
+              <Dialog.Panel className="w-[42rem] transform overflow-hidden rounded-lg bg-zinc-900 border border-zinc-800 p-6 text-left align-middle shadow-xl transition-all">
+                <header className="flex items-center gap-5">
                   <Image
                     src={request.requestor.avatar}
                     width={500}
@@ -112,19 +112,12 @@ export const CreateTicketFromRequestModal: FunctionComponent<CreateTicketFromReq
                     <h3 className="text-2xl font-semibold text-font-regular">{request.requestor.fullName}</h3>
                     <p className="text-font-regular/70 font-medium truncate">{request.requestor.positionTitle}</p>
                   </div>
-                  {/* <Dialog.Title as="h3" className="text-2xl font-semibold leading-6 text-font-regular">
-                    Create new ticket
-                  </Dialog.Title>
-                  <div className="mt-2">
-                    <p className="text-font-muted">Note that this ticket will be automatically assigned to you.</p>
-                  </div> */}
                 </header>
 
-                <main>
-                  <p className="text-2xl">{request.details}</p>
+                <main className="mt-5">
+                  <p className="text-2xl text-font-regular/90">{request.details}</p>
 
-                  <div>
-                    <div className="flex items-center gap-3 mt-3">
+                  <div className="flex items-center gap-3 mt-1">
                       <div className="flex items-center gap-1 justify-end text-font-muted">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -169,60 +162,16 @@ export const CreateTicketFromRequestModal: FunctionComponent<CreateTicketFromReq
                         </p>
                       </div>
                     </div>
-                  </div>
                 </main>
 
                 <form
+                  className="mt-12"
                   onSubmit={(e) => {
                     e.preventDefault();
                   }}
                 >
-                  {/* <section className="">
-                    <div className="w-full">
-                      <label htmlFor="requestor" className="pl-1 font-medium text-sm text-font-regular/80">
-                        Requestor
-                      </label>
-                      <p className="text-sm pl-1 text-font-muted mb-2">
-                        Search for the name of the end user who made the request.
-                      </p>
 
-                      <div className="relative">
-                        <input
-                          defaultValue={request.requestor.fullName}
-                          disabled
-                          id="requestor"
-                          className="w-full outline-none rounded-md bg-zinc-800/40 pl-11 py-2 border border-zinc-800 text-font-regular/70 font-semibold"
-                        />
-
-                        <div className="absolute top-0 flex items-center h-full w-10 p-[0.4rem]">
-                          <Image
-                            src={request.requestor.avatar}
-                            width={500}
-                            height={500}
-                            alt={"profile"}
-                            className="inline-block h-full w-full rounded-full object-cover shrink-0 border ml-1"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </section> */}
-
-                  <section className="mt-8 flex items-center gap-4 justify-between">
-                    {/* <div className="flex flex-col w-full">
-                      <label htmlFor="date" className="pl-1 font-medium text-sm text-font-regular/80">
-                        Date requested
-                      </label>
-                      <p className="text-sm pl-1 text-font-muted mb-2">When was this request made?</p>
-                      <input
-                        id="date"
-                        type="date"
-                        disabled
-                        defaultValue={dayjs(request.createdAt).format("YYYY-MM-DD")}
-                        className="w-full outline-none placeholder:text-font-muted rounded-md bg-zinc-800/40 px-3 py-2 border border-zinc-800 text-font-regular/70 font-semibold"
-                        placeholder="Date requested"
-                      />
-                    </div> */}
-
+                  <section className="flex items-center gap-4 justify-between">
                     <div className="flex flex-col w-full">
                       <label htmlFor="support-type" className="pl-1 font-medium text-sm text-font-regular/80">
                         Support type
@@ -446,88 +395,7 @@ export const CreateTicketFromRequestModal: FunctionComponent<CreateTicketFromReq
                         className="w-full resize-none outline-none rounded-md bg-zinc-800/40 px-3 py-2 border border-zinc-800 focus:border-blue-700"
                       />
                     </div>
-                    {/* <div className="flex items-start gap-3 rounded-lg p-5 bg-zinc-950/70">
-                      <Image
-                        src={request.requestor.avatar}
-                        width={500}
-                        height={500}
-                        alt={"profile"}
-                        className="inline-block h-[4rem] w-[4rem] rounded-full object-cover shrink-0 border-4 border-font-regular"
-                      />
-                      <section className="pr-4">
-                        <h3 className="text-2xl font-semibold text-font-regular">{request.requestor.fullName}</h3>
-                        <p className="text-font-regular/70 font-medium truncate">{request.requestor.positionTitle}</p>
-
-                        <div className="mt-4">
-                          <p className="text-2xl">{request.details}</p>
-                        </div>
-
-                        <div>
-                          <div className="flex items-center gap-3 mt-3">
-                            <div className="flex items-center gap-1 justify-end text-font-muted">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="1em"
-                                height="1em"
-                                viewBox="0 0 24 24"
-                                className="text-font-muted/75"
-                              >
-                                <g fill="currentColor">
-                                  <path d="M15 17a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z"></path>
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H6ZM5 18V7h14v11a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1Z"
-                                    clipRule="evenodd"
-                                  ></path>
-                                </g>
-                              </svg>
-                              <p className="font-medium text-sm text-font-muted/75">
-                                {dayjs(request.createdAt).format("DD MMM YYYY")}
-                              </p>
-                            </div>
-                            <p className="text-sm text-font-muted/50">|</p>
-                            <div className="flex items-center gap-1 justify-end text-font-muted">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="1em"
-                                height="1em"
-                                viewBox="0 0 24 24"
-                                className="text-font-muted/75"
-                              >
-                                <g fill="currentColor">
-                                  <path d="M9 7h2v5h5v2H9V7Z"></path>
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2s10 4.477 10 10Zm-2 0a8 8 0 1 1-16 0a8 8 0 0 1 16 0Z"
-                                    clipRule="evenodd"
-                                  ></path>
-                                </g>
-                              </svg>
-                              <p className="font-medium text-sm text-font-muted/75">
-                                {dayjs(request.createdAt).format("hh:mm A")}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
-                    </div> */}
                   </section>
-
-                  {/* <section className="mt-7">
-                    <div className="flex flex-col w-full">
-                      <label htmlFor="details" className="pl-1 font-medium text-sm text-font-regular/80">
-                        Details
-                      </label>
-                      <p className="text-sm pl-1 text-font-muted mb-2">Please elaborate the details of the request.</p>
-                      <textarea
-                        defaultValue={request.details}
-                        disabled
-                        id="details"
-                        rows={5}
-                        className="w-full resize-none outline-none rounded-md bg-zinc-800/40 px-3 py-2 border border-zinc-800 text-font-regular/70 font-semibold"
-                      />
-                    </div>
-                  </section> */}
 
                   <section className="mb-8 flex items-center justify-end gap-3 mt-7">
                     <button

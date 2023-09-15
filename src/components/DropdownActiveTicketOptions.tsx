@@ -79,50 +79,11 @@ export const DropdownActiveTicketOptions: FunctionComponent = () => {
                         d="M12 4a1 1 0 0 0-1 1v6H5a1 1 0 1 0 0 2h6v6a1 1 0 1 0 2 0v-6h6a1 1 0 1 0 0-2h-6V5a1 1 0 0 0-1-1Z"
                       ></path>
                     </svg>
-                    <p className="text-font-regular/70 text-lg">Create new ticket</p>
+                    <p className="text-amber-600 text-lg">Create new ticket</p>
                   </div>
                 </div>
               </DropdownMenu.Item>
 
-              {/* <DropdownMenu.Item className="px-3 py-2 hover:bg-zinc-800 cursor-pointer outline-none">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4 w-full">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="1.2em"
-                      height="1.2em"
-                      viewBox="0 0 24 24"
-                      className="text-font-regular/70"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="m10.586 13.414l-2.829-2.828L6.343 12l4.243 4.243l7.07-7.071l-1.413-1.415l-5.657 5.657Z"
-                      ></path>
-                    </svg>
-                    <p className="text-font-regular/70 text-lg">Mark as closed</p>
-                  </div>
-                </div>
-              </DropdownMenu.Item>
-
-              <DropdownMenu.Item className="px-3 py-2 hover:bg-zinc-800 cursor-pointer outline-none">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4 w-full">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="1.2em"
-                      height="1.2em"
-                      viewBox="0 0 24 24"
-                      className="text-font-regular/70"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M6.225 4.811a1 1 0 0 0-1.414 1.414L10.586 12L4.81 17.775a1 1 0 1 0 1.414 1.414L12 13.414l5.775 5.775a1 1 0 0 0 1.414-1.414L13.414 12l5.775-5.775a1 1 0 0 0-1.414-1.414L12 10.586L6.225 4.81Z"
-                      ></path>
-                    </svg>
-                    <p className="text-font-regular/70 text-lg">Cancel this ticket</p>
-                  </div>
-                </div>
-              </DropdownMenu.Item> */}
             </DropdownMenu.Group>
 
             <DropdownMenu.Separator className="h-[1px] bg-zinc-800 m-[5px]" />

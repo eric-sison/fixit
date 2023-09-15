@@ -14,8 +14,9 @@ export const RequestTicketPanel: FunctionComponent<RequestTicketPanelProps> = ({
 
   return (
     <div className="overflow-x-hidden">
-      <TicketPanelHeader status="request" />
-      {requests.length === 0 ? <EmptyTicketCard status="request" /> : children}
+      <TicketPanelHeader status="queue" />
+
+      {requests.length === 0 ? <EmptyTicketCard status="queue" /> : children}
     </div>
   );
 };

@@ -37,10 +37,6 @@ export const DropdownRequestCardOptions: FunctionComponent<DropdownRequestCardOp
             align="end"
             className="bg-zinc-900 w-44 rounded-md overflow-clip border border-zinc-800"
           >
-            {/* <DropdownMenu.Label className="px-3 py-2 font-medium text-font-muted/60 flex items-center gap-4">
-        <p>Actions</p>
-      </DropdownMenu.Label> */}
-
             <DropdownMenu.Group>
               <DropdownMenu.Item
                 onClick={() => setOpenDetails(true)}
@@ -53,6 +49,17 @@ export const DropdownRequestCardOptions: FunctionComponent<DropdownRequestCardOp
                 </div>
               </DropdownMenu.Item>
 
+              <DropdownMenu.Item
+                onClick={() => console.log(request.requestor.fullName)}
+                className="px-3 py-2 hover:bg-zinc-800 cursor-pointer outline-none"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4 w-full">
+                    <p className="text-font-regular/70">Transfer request</p>
+                  </div>
+                </div>
+              </DropdownMenu.Item>
+
               <DropdownMenu.Separator className="h-[1px] bg-zinc-800 m-[5px]" />
 
               <DropdownMenu.Item
@@ -61,18 +68,7 @@ export const DropdownRequestCardOptions: FunctionComponent<DropdownRequestCardOp
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4 w-full">
-                    <p className="text-font-regular/70">Create new ticket</p>
-                  </div>
-                </div>
-              </DropdownMenu.Item>
-
-              <DropdownMenu.Item
-                onClick={() => console.log(request.requestor.fullName)}
-                className="px-3 py-2 hover:bg-zinc-800 cursor-pointer outline-none"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4 w-full">
-                    <p className="text-font-regular/70">Transfer request</p>
+                    <p className="text-amber-600">Create new ticket</p>
                   </div>
                 </div>
               </DropdownMenu.Item>

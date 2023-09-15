@@ -2,9 +2,10 @@
 
 import { FunctionComponent } from "react";
 import { DropdownActiveTicketOptions } from "./DropdownActiveTicketOptions";
+import { ServiceStatus } from "@fixhub/types/request";
 
 type TicketPanelHeaderProps = {
-  status: "request" | "active" | "closed" | "cancelled";
+  status: ServiceStatus;
 };
 
 export const TicketPanelHeader: FunctionComponent<TicketPanelHeaderProps> = ({ status }) => {
@@ -12,24 +13,28 @@ export const TicketPanelHeader: FunctionComponent<TicketPanelHeaderProps> = ({ s
     <>
       <h3 className="mb-[0.6rem] text-xl bg-zinc-950 py-3 px-4 rounded-lg flex justify-between items-center">
         <div className="flex items-center gap-2">
-          {status === "request" ? (
+          {status === "queue" ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
+              width="1.25em"
+              height="1.25em"
               viewBox="0 0 24 24"
               className="text-font-muted"
             >
-              <path
-                fill="currentColor"
-                d="M12 4a1 1 0 0 0-1 1v6H5a1 1 0 1 0 0 2h6v6a1 1 0 1 0 2 0v-6h6a1 1 0 1 0 0-2h-6V5a1 1 0 0 0-1-1Z"
-              ></path>
+              <g fill="currentColor">
+                <path d="M12 18a5.978 5.978 0 0 1-4-1.528A5.985 5.985 0 0 1 6 12c0-1.777.772-3.374 2-4.472A5.978 5.978 0 0 1 12 6v12Z"></path>
+                <path
+                  fillRule="evenodd"
+                  d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12Zm10 8a8 8 0 1 1 0-16a8 8 0 0 1 0 16Z"
+                  clipRule="evenodd"
+                ></path>
+              </g>
             </svg>
           ) : status === "active" ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
+              width="1.25em"
+              height="1.25em"
               viewBox="0 0 24 24"
               className="text-font-muted"
             >
@@ -45,8 +50,8 @@ export const TicketPanelHeader: FunctionComponent<TicketPanelHeaderProps> = ({ s
           ) : status === "closed" ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
+              width="1.25em"
+              height="1.25em"
               viewBox="0 0 24 24"
               className="text-font-muted"
             >
@@ -62,8 +67,8 @@ export const TicketPanelHeader: FunctionComponent<TicketPanelHeaderProps> = ({ s
           ) : (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
+              width="1.25em"
+              height="1.25em"
               viewBox="0 0 24 24"
               className="text-font-muted"
             >
@@ -76,8 +81,8 @@ export const TicketPanelHeader: FunctionComponent<TicketPanelHeaderProps> = ({ s
             </svg>
           )}
           <span className="font-medium text-font-regular/70 tracking-wide">
-            {status === "request"
-              ? "Requests"
+            {status === "queue"
+              ? "Queue"
               : status === "active"
               ? "Active"
               : status === "closed"

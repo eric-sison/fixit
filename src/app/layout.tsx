@@ -3,6 +3,7 @@ import "../styles/global.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@fixhub/components/ThemeProvider";
+import { MyQueryClientProvider } from "@fixhub/components/MyQueryClientProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,11 +13,15 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body style={inter.style}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <main className="h-[calc(100vh-5rem)] w-screen dark:bg-background">{children}</main>
+          <main className="h-[calc(100vh-5rem)] w-screen dark:bg-background">
+           <MyQueryClientProvider>{children}</MyQueryClientProvider>
+          </main>
         </ThemeProvider>
       </body>
     </html>

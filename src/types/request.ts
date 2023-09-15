@@ -6,3 +6,5 @@ export type ServiceRequest = {
   details: string;
   createdAt: Date;
 };
+
+export type ServiceStatus = "queue" | "active" | "closed" | "cancelled";

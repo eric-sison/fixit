@@ -4,11 +4,12 @@ import { TicketSummary } from "@fixhub/types/ticket";
 import { FunctionComponent, ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { TicketPanelHeader } from "./TicketPanelHeader";
 import { EmptyTicketCard } from "./EmptyTicketCard";
+import { ServiceStatus } from "@fixhub/types/request";
 
 type TicketPanelProps = {
   children: ReactNode | ReactNode[];
   tickets: TicketSummary[];
-  status: "active" | "closed" | "cancelled";
+  status: ServiceStatus;
 };
 
 type TicketSummaryContextState = Omit<TicketPanelProps, "children" | "status"> & {

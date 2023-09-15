@@ -10,27 +10,27 @@ type RequestCardProps = {
 
 export const RequestCard: FunctionComponent<RequestCardProps> = ({ request }) => {
   return (
-    <div className="bg-zinc-950/50 max-h-64 p-4 flex items-start gap-3 group last:mb-0 border-x border-x-zinc-800/70 first:border-t first:border-t-zinc-800/70 border-b border-b-zinc-800/70 first:rounded-t-lg last:border-b-zinc-800/70 last:rounded-b-lg">
+    <div className="bg-zinc-950/50 max-h-64 p-4 flex items-start gap-5 group last:mb-0 border-x border-x-zinc-800/70 first:border-t first:border-t-zinc-800/70 border-b border-b-zinc-800/70 first:rounded-t-lg last:border-b-zinc-800/70 last:rounded-b-lg">
       <Image
         src={request.requestor.avatar}
         width={500}
         height={500}
         alt={"profile"}
-        className="inline-block h-[3rem] w-[3rem] rounded-full object-cover shrink-0"
+        className="inline-block h-[2.5rem] w-[2.5rem] rounded-full object-cover shrink-0"
       />
 
       <section className="w-full">
         <header className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-semibold text-blue-700">{request.requestor.fullName}</h3>
-            <p className="text-sm text-font-regular/70">{request.requestor.positionTitle}</p>
+            <p className="text-sm text-font-regular/50 font-medium line-clamp-1">{request.requestor.positionTitle}</p>
           </div>
 
           <DropdownRequestCardOptions request={request} />
         </header>
 
-        <main className="my-4 w-[17.5rem]">
-          <p className="text-xl text-font-regular/70 font-medium leading-tight line-clamp-2">{request.details}</p>
+        <main className="mt-4 mb-2 pr-7">
+          <p className="text-lg text-font-regular/80 font-medium leading-tight line-clamp-2">{request.details}</p>
         </main>
 
         <div className="flex items-center gap-3">

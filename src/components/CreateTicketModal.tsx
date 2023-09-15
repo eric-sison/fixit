@@ -1,6 +1,6 @@
 import { Combobox, Dialog, Transition } from "@headlessui/react";
 import { Fragment, FunctionComponent, useEffect, useState } from "react";
-import users from "../../mock/users";
+// import users from "../../mock/users";
 import supportTypes from "../../mock/support-types";
 import categories from "../../mock/categories";
 import { User } from "@fixhub/types/users";
@@ -8,6 +8,8 @@ import Image from "next/image";
 import dayjs from "dayjs";
 import { Category, SupportType } from "@fixhub/types/ticket";
 import { useActiveTicketsStore } from "@fixhub/utils/stores/tickets";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 type ModalProps = {
   open: boolean;
@@ -17,10 +19,16 @@ type ModalProps = {
 export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen }) => {
   const activeTickets = useActiveTicketsStore((state) => state.activeTickets);
   const setActiveTickets = useActiveTicketsStore((state) => state.setActiveTickets);
-  //const { tickets, setTickets } = useTickets();
+
+  const { data: users, error } = useQuery({
+    queryKey: ["requestors"],
+    queryFn: async () => {
+      return (await axios.get<User[]>("http://localhost:3001/employees")).data;
+    },
+  });
 
   // states used for requestor
-  const [selectedRequestor, setSelectedRequestor] = useState<User>(users[0]);
+  const [selectedRequestor, setSelectedRequestor] = useState<User>({} as User);
   const [queryRequestor, setQueryRequestor] = useState("");
 
   // state used for date requested
@@ -50,7 +58,7 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
   const filteredRequestors =
     queryRequestor === ""
       ? users
-      : users.filter((user) => {
+      : users?.filter((user) => {
           return user.fullName.toLowerCase().includes(queryRequestor.toLowerCase());
         });
 
@@ -77,7 +85,7 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
 
   const reset = () => {
     setOpen(false);
-    setSelectedRequestor(users[0]);
+    setSelectedRequestor({} as User);
     setDateRequested(dayjs().format("YYYY-MM-DD"));
     setSelectedSupportType(supportTypes[0]);
     setSelectedCategory(categories[0]);
@@ -112,12 +120,12 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-[42rem] space-y-10 transform overflow-hidden rounded-lg bg-zinc-900 border border-zinc-800 p-6 text-left align-middle shadow-xl transition-all">
-                <header>
+                <header className="leading-4">
                   <Dialog.Title as="h3" className="text-2xl font-semibold leading-6 text-font-regular">
                     Create new ticket
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-font-muted">Note that this ticket will be automatically assigned to you.</p>
+                    <p className="text-font-regular/70">Note that this ticket will be automatically assigned to you.</p>
                   </div>
                 </header>
 
@@ -158,20 +166,19 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
                               id="requestor"
                               onChange={(e) => setQueryRequestor(e.target.value)}
                               displayValue={(requestor: User) => requestor?.fullName}
+                              placeholder="Search end user who initiated the request..."
                               className="w-full outline-none placeholder:text-font-muted rounded-md bg-zinc-800/40 pl-11 py-2 border border-zinc-800 focus:border-blue-700"
                             />
 
-                            <Combobox.Options className="absolute z-30 border border-zinc-800 mt-2 rounded max-h-96 overflow-auto min-w-[20rem]">
-                              {filteredRequestors.map((requestor, index) => (
+                            <Combobox.Options className="absolute z-30 border bg-zinc-900 border-zinc-800 mt-2 rounded-lg max-h-96 overflow-auto w-full">
+                              {filteredRequestors?.map((requestor, index) => (
                                 <Combobox.Option key={index} value={requestor} as={Fragment}>
                                   {({ active, selected }) => (
                                     <li
                                       role="button"
                                       className={`${
-                                        active || selected
-                                          ? "bg-zinc-900 border-b-zinc-700/40"
-                                          : "bg-zinc-950 border-b-zinc-800/40"
-                                      } px-5 py-3 flex gap-3 items-center border-b last:border-b-transparent`}
+                                        active || selected ? "text-font-regular/90 bg-zinc-700/10" : "text-font-muted"
+                                      } px-5 py-3 flex gap-5 items-center border-b bg-zinc-950/70 border-b-zinc-700/40 last:border-b-transparent cursor-pointer`}
                                     >
                                       <Image
                                         src={requestor.avatar}
@@ -180,9 +187,26 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
                                         alt={`profile-${requestor.id}`}
                                         className="inline-block h-[2.5rem] w-[2.5rem] rounded-full object-cover shrink-0"
                                       />
-                                      <section>
-                                        <h3 className="text-font-regular/80 font-medium">{requestor.fullName}</h3>
-                                        <p className="text-font-muted text-sm">{requestor.positionTitle}</p>
+                                      <section className="flex items-center justify-between w-full">
+                                        <div>
+                                          <h3 className="text-xl font-medium">{requestor.fullName}</h3>
+                                          <p className="">{requestor.positionTitle}</p>
+                                        </div>
+
+                                        {selected && (
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="2em"
+                                            height="2em"
+                                            viewBox="0 0 24 24"
+                                            className="text-green-700"
+                                          >
+                                            <path
+                                              fill="currentColor"
+                                              d="m10.586 13.414l-2.829-2.828L6.343 12l4.243 4.243l7.07-7.071l-1.413-1.415l-5.657 5.657Z"
+                                            ></path>
+                                          </svg>
+                                        )}
                                       </section>
                                     </li>
                                   )}
@@ -237,7 +261,7 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
                           </div>
 
                           {filteredSupportTypes.length === 0 ? null : (
-                            <Combobox.Options className="absolute z-20 border border-zinc-800 mt-2 rounded max-h-96 overflow-auto min-w-[10rem]">
+                            <Combobox.Options className="absolute z-20 border border-zinc-800 mt-2 rounded max-h-96 overflow-auto min-w-full">
                               {filteredSupportTypes.map((supportType, index) => (
                                 <Combobox.Option key={index} value={supportType} as={Fragment}>
                                   {({ active, selected }) => (
@@ -406,14 +430,15 @@ export const CreateTicketModal: FunctionComponent<ModalProps> = ({ open, setOpen
                   <section className="mt-7">
                     <div className="flex flex-col w-full">
                       <label htmlFor="details" className="pl-1 font-medium text-sm text-font-regular/80">
-                        Details
+                        Ticket details
                       </label>
-                      <p className="text-sm pl-1 text-font-muted mb-2">Please elaborate the details of the request.</p>
+                      <p className="text-sm pl-1 text-font-muted mb-2">Please elaborate the details of this ticket.</p>
                       <textarea
                         value={details}
                         onChange={(e) => setDetails(e.target.value)}
                         id="details"
                         rows={5}
+                        placeholder="Enter details here..."
                         className="w-full resize-none outline-none rounded-md bg-zinc-800/40 px-3 py-2 border border-zinc-800 focus:border-blue-700"
                       />
                     </div>

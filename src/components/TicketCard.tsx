@@ -12,16 +12,16 @@ type TicketCardProps = {
 
 export const TicketCard: FunctionComponent<TicketCardProps> = ({ ticket }) => {
   return (
-    <div className="bg-zinc-950/50 max-h-64 p-4 flex items-start gap-3 group last:mb-0 border-x border-x-zinc-800/70 first:border-t first:border-t-zinc-800/70 border-b border-b-zinc-800/70 first:rounded-t-lg last:border-b-zinc-800/70 last:rounded-b-lg">
+    <div className="bg-zinc-950/50 max-h-64 p-4 flex items-start gap-5 group last:mb-0 border-x border-x-zinc-800/70 first:border-t first:border-t-zinc-800/70 border-b border-b-zinc-800/70 first:rounded-t-lg last:border-b-zinc-800/70 last:rounded-b-lg">
       <Image
         src={ticket.requestor.avatar}
         width={500}
         height={500}
         alt={"profile"}
-        className="inline-block h-[3rem] w-[3rem] rounded-full object-cover shrink-0"
+        className="inline-block h-[2.5rem] w-[2.5rem] rounded-full object-cover shrink-0"
       />
 
-      <div className="space-y-5 w-full h-full">
+      <div className="space-y-3 w-full h-full">
         <section className="space-y-1">
           <h2 className="flex justify-between">
             <div className="text-2xl font-extrabold text-font-regular/90">
@@ -37,7 +37,7 @@ export const TicketCard: FunctionComponent<TicketCardProps> = ({ ticket }) => {
             <DropdownTicketCardOptions ticket={ticket} />
           </h2>
           <div className="w-[17.5rem] mb-5">
-            <p className="text-xl text-font-regular/70 font-medium leading-tight line-clamp-2 mt-4">{ticket.details}</p>
+            <p className="text-lg text-font-regular/70 font-medium leading-tight line-clamp-2 mt-4">{ticket.details}</p>
 
             <section className="space-x-2 mt-2">
               <TicketTag tag={ticket.category} />

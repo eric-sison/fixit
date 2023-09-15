@@ -1,3 +1,4 @@
+import { ServiceStatus } from "./request";
 import { User } from "./users";
 
 export type TicketSummary = {
@@ -9,7 +10,7 @@ export type TicketSummary = {
   supportType: string;
   details: string;
   createdAt: Date;
-  status: "active" | "closed" | "cancelled";
+  status: ServiceStatus;
 };
 
 export type ClosedTicket = {

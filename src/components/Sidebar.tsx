@@ -8,7 +8,7 @@ export const Sidebar: FunctionComponent = () => {
   const pathName = usePathname();
 
   return (
-    <aside className="w-64 bg-zinc-950/40 shrink-0 h-full border-r border-r-zinc-800 px-3 py-7">
+    <aside className="w-60 bg-zinc-950/50 shrink-0 h-full border-r border-r-zinc-800 px-3 py-7">
       <ul className="space-y-2">
         <div className="group">
           <Link
@@ -39,6 +39,42 @@ export const Sidebar: FunctionComponent = () => {
         </div>
 
         <div className="group">
+          <section className="flex items-center justify-between">
+            <Link
+              href="/requests"
+              role="button"
+              className={`${
+                pathName === "/requests" && "bg-zinc-500 bg-opacity-10 text-font-regular"
+              } w-full flex items-center justify-between group-hover:bg-zinc-500 group-hover:bg-opacity-10 text-font-muted group-hover:text-font-regular px-3 py-2 rounded`}
+            >
+              <div className="flex items-center gap-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="25"
+                  viewBox="0 0 24 24"
+                  className={`${
+                    pathName === "/requests" ? "text-blue-700" : "text-font-muted"
+                  } group-hover:text-blue-700`}
+                >
+                  <path
+                    fill="currentColor"
+                    fillRule="evenodd"
+                    d="M2 19a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v14Zm18 0a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5v8.011h2.395L14 9.864l1.605 2.147H18V4h1a1 1 0 0 1 1 1v14ZM16 4h-4v5.336l2-2.676l2 2.676V4Z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+                <span className="font-medium text-lg">Requests</span>
+              </div>
+
+              <div className="h-5 w-5 font-bold flex items-center justify-center bg-orange-700/90 text-font-regular rounded-md shrink-0">
+                <span className="text-xs">8</span>
+              </div>
+            </Link>
+          </section>
+        </div>
+
+        <div className="group">
           <Link
             href="/tickets"
             role="button"
@@ -51,15 +87,18 @@ export const Sidebar: FunctionComponent = () => {
               width="25"
               height="25"
               viewBox="0 0 24 24"
-              className={`${pathName === "/tickets" ? "text-blue-700" : "text-font-muted"} group-hover:text-blue-700`}
+              className={`${
+                pathName === "/tickets" ? "text-violet-700" : "text-font-muted"
+              } group-hover:text-violet-700`}
             >
               <g fill="currentColor">
-                <path d="M6 7a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Zm7 0a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1V7Z"></path>
+                <rect width="10" height="10" x="7" y="9" opacity=".5" rx="1"></rect>
                 <path
                   fillRule="evenodd"
-                  d="M2 4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm2 0h16v16H4V4Z"
+                  d="M18 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1ZM6 1a3 3 0 0 0-3 3v16a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V4a3 3 0 0 0-3-3H6Z"
                   clipRule="evenodd"
                 ></path>
+                <path d="M7 6a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2H8a1 1 0 0 1-1-1Z"></path>
               </g>
             </svg>
             <span className="font-medium text-lg">Tickets</span>
